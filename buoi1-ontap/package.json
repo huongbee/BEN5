@@ -1,0 +1,6 @@
+{
+  "name": "buoi1",
+  "scripts": {
+    "start": "nodemon index.js"
+  }
+}
