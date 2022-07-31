@@ -1,6 +1,9 @@
 {
   "name": "buoi1",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon a.js",
+    "debug": "nodemon index.js",
+    "testing": "nodemon test.js",
+    "production": "nodemon production.js"
   }
 }
