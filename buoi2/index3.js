@@ -1,6 +1,6 @@
 /**
 cho biến n = 5;
-viết hàm in ra màn hình các hình sau:
+viết 1 hàm in ra màn hình các hình sau:
 
  *
  * *
