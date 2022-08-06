@@ -22,6 +22,21 @@ const arr = [1, 2, 3, 5, 7, 13, 90, 6, 8, 9, 17];
 // arr.forEach(function (item) {
 //   console.log(item);
 // });
+// const fn = (val) => {
+//   if (val % 2 == 0)
+//     return val;
+// }
+const fn = (val) => val % 2 == 0 ? val : undefined;
+const fillered = arr.filter(fn);
+console.log(fillered);
+
+
+// undefined: undefined
+// null : obj
+// empty : string
+// 0
+// false
+// NaN
 
 // arr.forEach((item, i) => console.log(i));
 // const a = 9;
@@ -41,13 +56,13 @@ const arr = [1, 2, 3, 5, 7, 13, 90, 6, 8, 9, 17];
 //   return false;
 // }
 
-const soChinhPhuong = (num) => {
-  const sqrt = Math.sqrt(num); // 1.355666.
-  if (sqrt === parseInt(sqrt)) return true;
-  return false;
-}
-// console.log(soChinhPhuong(80));
-let result = 'Day so chinh phuong la: ';
+// const soChinhPhuong = (num) => {
+//   const sqrt = Math.sqrt(num); // 1.355666.
+//   if (sqrt === parseInt(sqrt)) return true;
+//   return false;
+// }
+// // console.log(soChinhPhuong(80));
+// let result = 'Day so chinh phuong la: ';
 // arr.forEach(function (item) {
 //   if (soChinhPhuong(item)) {
 //     result += item + ' '; // result = result + item;
