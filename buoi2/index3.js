@@ -49,7 +49,7 @@ const hinh2 = (n) => {
 }
 // hinh1(n);
 // console.log('\n');
-hinh2(n);
+// hinh2(n);
 
 /*
 
@@ -117,6 +117,24 @@ const hinh5 = (n) => {
     * * *
       * *
         *
-
-
  */
+
+const draw = (n, fn) => {
+  let starString = '';
+  for (let x = 1; x <= 5; x++) {
+    for (let y = 1; y <= 5; y++) {
+      if (fn(x, y, n)) {  // fn thực thi với 3 args
+        starString += '* ';
+      } else {
+        starString += '  ';
+      }
+    }
+    starString += '\n'
+  }
+  return starString;
+}
+const s = draw(n, (x, y) => y <= x) // ve hinh 1, với fn = (x, y) => y <= x
+const s2 = draw(n, (x, y, n) => y <= n - x + 1) // ve hinh 2, với fn = (x, y, n) => y <= n - x + 1
+const s4 = draw(n, (x, y, n) => x == 1 || y == n - x + 1 || y == 1)
+
+console.log(s4);
