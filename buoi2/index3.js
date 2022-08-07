@@ -13,11 +13,12 @@ o--------->
  * * * *          x=4 y=1,2,3,4
  * * * * *
 
- * * * * *
- * * * *
- * * *
+ * * * * *   x=1 y=1,2,3,4,5
+ * * * *     x=2 y=1,2,3,4
+ * * *       x=3 y=1,2,3
  * *
  *
+
 */
 const n = 5;
 const hinh1 = (n) => {
@@ -26,6 +27,8 @@ const hinh1 = (n) => {
     for (let y = 1; y <= 5; y++) {
       if (y <= x) {
         starString += '* ';
+      } else {
+        starString += '  ';
       }
     }
     console.log(starString);
@@ -35,8 +38,10 @@ const hinh2 = (n) => {
   for (let x = 1; x <= 5; x++) {
     let starString = '';
     for (let y = 1; y <= 5; y++) {
-      if (y >= x) {
+      if (y <= n - x + 1) {  // || y<=x
         starString += '* ';
+      } else {
+        starString += '  ';
       }
     }
     console.log(starString);
@@ -44,7 +49,7 @@ const hinh2 = (n) => {
 }
 // hinh1(n);
 // console.log('\n');
-// hinh2(n);
+hinh2(n);
 
 /*
 
@@ -67,13 +72,51 @@ const hinh3 = (n) => {
     console.log(starString);
   }
 }
-hinh3(n);
+// hinh3(n);
 
 /*
- * * * * *
- *     *
- *   *
- * *
- *
+ * * * * *   x=1 y=1,2,3,4,5 (ko phu thuoc y)
+ *     *     x=2 y=1,4
+ *   *       x=3 y=1,3
+ * *         x=4 y=1,2
+ *           x=5 y=1
+
+ */
+
+const hinh4 = (n) => {
+  for (let x = 1; x <= 5; x++) {
+    let starString = '';
+    for (let y = 1; y <= 5; y++) {
+      if (x == 1 || y == n - x + 1 || y == 1) {
+        starString += '* ';
+      } else {
+        starString += '  ';
+      }
+    }
+    console.log(starString);
+  }
+}
+// hinh4(n);
+const hinh5 = (n) => {
+  for (let x = 1; x <= 5; x++) {
+    let starString = '';
+    for (let y = 1; y <= 5; y++) {
+      if (y >= x) {
+        starString += '* ';
+      } else {
+        starString += '  ';
+      }
+    }
+    console.log(starString);
+  }
+}
+/**
+
+* * * * *
+  * * * *
+    * * *
+      * *
+        *
+
 
  */
