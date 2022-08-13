@@ -1,0 +1,18 @@
+{
+  "name": "init-pkn",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "start:dev": "nodemon dev.js"
+  },
+  "author": "HuongNTN",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "fs": "0.0.1-security",
+    "validator": "^13.7.0"
+  }
+}

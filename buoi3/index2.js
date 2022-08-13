@@ -49,10 +49,19 @@ console.log(b5.address);
 Bai 1:
 Cho O(0,0) và A(5,6)
 Tính khoảng cách O->A;
+  y
+6 |           A(5,6)
+  |
+  |
+  |
+  |
+  |______________ x
+  O            5
+
 
 Bai 2;
 Cho A(5,6) B(1,1) C(8,16)
-Tính chu vi tam giác ABC
+Tính chu vi tam giác ABC = sum(AB+BC+AC)
  */
 
 class Point {
