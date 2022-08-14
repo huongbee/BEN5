@@ -9,6 +9,7 @@ const cal = (a, b, pt, cb) => {
   });
 }
 // (3 + 4) * 5 / 2
+const r = '';
 cal(3, 4, 'cong', (error, result) => {
   if (error == null) {
     cal(result, 5, 'nhan', (err, tich) => {
@@ -19,3 +20,5 @@ cal(3, 4, 'cong', (error, result) => {
     })
   }
 });
+
+console.log(r);

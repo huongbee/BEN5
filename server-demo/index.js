@@ -14,3 +14,6 @@ app.get('/:pheptinh/:a/:b', (req, res) => {
   return res.send({ a, b, pheptinh: cal.pheptinh, result: cal.result });
 })
 app.listen(3000, () => console.log('Server listening on port 3000'))
+
+  // http://localhost:3000/cong/1/3
+  // (3 + 4) * 5 / 2
