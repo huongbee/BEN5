@@ -18,3 +18,7 @@ promise.then(result => {
   .then(result => console.log(result));
 
 // console.log('hello BEN5');
+
+setInterval(() => {
+  console.log('setInterval');
+}, 1000);

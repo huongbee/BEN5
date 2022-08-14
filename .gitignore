@@ -1,2 +1,1 @@
-buoi4/init-pkn/node_modules/*
-/test.txt
+*node_modules/*
