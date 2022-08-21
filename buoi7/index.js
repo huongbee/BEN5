@@ -1,17 +1,17 @@
 const request = require('request');
 
-function calculator(a, b, pt) {
-  return new Promise((resolve, reject) => {
-    const url = `http://localhost:3000/${pt}/${a}/${b}`;
-    request.get(url, (error, response, body) => {
-      if (error) return reject(error); // http error
-      if (body.startsWith('<!DOCTYPE html>')) // data error
-        return reject(new Error('Data error!'));
-      const data = JSON.parse(body);
-      return resolve(data)
-    })
-  })
-}
+// function calculator(a, b, pt) {
+//   return new Promise((resolve, reject) => {
+//     const url = `http://localhost:3000/${pt}/${a}/${b}`;
+//     request.get(url, (error, response, body) => {
+//       if (error) return reject(error); // http error
+//       if (body.startsWith('<!DOCTYPE html>')) // data error
+//         return reject(new Error('Data error!'));
+//       const data = JSON.parse(body);
+//       return resolve(data)
+//     })
+//   })
+// }
 // async function call() {
 //   // const a = 10;
 //   const tong = await calculator(1, 2, 'cong'); // synchronous
@@ -27,3 +27,13 @@ function calculator(a, b, pt) {
 //   // const thuong = await calculator(tich.result, 2, 'chia');
 //   // console.log(thuong.result);
 // })();
+
+async function calculator(a, b, pt) {
+  if (pt === 'cong') return a + b;
+  if (pt === 'tru') return a - b;
+  if (pt === 'nhan') return a * b;
+  if (pt === 'chia' && b != 0) return a / b;
+  throw new Error('Invalid parameter');
+}
+const result = calculator(1, 3, 'chia');
+console.log(result);
