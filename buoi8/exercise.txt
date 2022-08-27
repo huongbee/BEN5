@@ -1,0 +1,36 @@
+
+/**
+ * 1. Tạo collection user với các thông tin sau:
+ *      email, password, name, posts -> post, friends -> user, receiveRequests -> user, sendRequests -> user,
+ *
+ * 2. Tạo collection post với các thông tin sau:
+ *      author -> user, content, likes -> user, comments -> comment
+ *
+ * 3. Tạo collection comment với các thông tin sau:
+ *      author -> user, post -> post, content, likes -> user
+ *
+ * 4. Thực hiện các yêu cầu bên dưới:
+ *      4.1 Thêm ít nhất 3 account (nguyenvana@gmail.com, nguyenvanb@gmail.com, nguyenvanc@gmail.com) vào collection user,
+ *      4.2 Thêm ít nhất 3 bài post cho các user trên
+ *      4.3 Thêm ít nhất 3 comment cho các bài post trên
+ *
+ *      4.4 Dùng tài khoản nguyenvana@gmail.com like bài post có id ...
+ *      4.5 Dùng tài khoản nguyenvana@gmail.com dislike bài post có id ...
+ *      4.6 Dùng tài khoản user nguyenvana@gmail.com gửi yêu cầu kết bạn đến
+ *          tài khoản nguyenvanb@gmail.com
+
+ *      4.7 Account nguyenvanb@gmail.com accept yêu cầu kết bạn của acc nguyenvana@gmail.com
+ *      4.8 Account nguyenvanb@gmail.com huỷ yêu cầu kết bạn của acc nguyenvana@gmail.com
+ *
+ *      4.9 Liệt kê các bài đăng của user có email 'nguyenvana@gmail.com'
+ *      4.10 Cho biết user có email 'nguyenvana@gmail.com' có tất cả bao nhiêu bạn bè, cho biết thông tin của các user đó
+ *      4.11 Liệt kê các yêu cầu kết bạn đã nhận của user nguyenvana@gmail.com, cho biết tên của người đó
+ *      4.12 Cho biết bài đăng với id .... có bao nhiêu lượt like,
+ *          cho biết tên người tạo,
+ *          liệt kê các comment của bài đăng đó,
+ *          cho biết tên của user đã comment
+ *      4.13 Cho biết comment trên bài post có id ... của user nguyenvana@gmail.com
+ *          có bao nhiêu lượt like
+ *      4.14 Cập nhật lại nội dung bài đăng có id ...
+ *      4.15 Xoá bài đăng có ít hơn 5 lượt like
+ * */
