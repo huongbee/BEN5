@@ -34,3 +34,7 @@
  *      4.14 Cập nhật lại nội dung bài đăng có id ...
  *      4.15 Xoá bài đăng có ít hơn 5 lượt like
  * */
+
+// select: populate
+// updateOne || update || updateMany
+// deleteOne || delete || deleteMany
