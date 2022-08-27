@@ -34,3 +34,23 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
 // ]).then(result => console.log(result));
 
 // hash | encode | encrypt
+
+(async () => {
+  // user login
+  const user = await UserModel.findOne({
+    email: 'nguyenvanc@gmail.com',
+    password: sha256(sha256(SECRET_KEY + '111111'))
+  })
+  if (user) {
+    // insert
+    // console.log(user);
+    const post = await PostModel.create({
+      author: user._id,
+      content: 'Status thu tu tren trang ca nhan cua user C'
+    })
+
+  } else {
+    console.log('Can\'t find user');
+  }
+
+})();
