@@ -185,7 +185,10 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
 (async () => {
   const result = await UserModel.findOne({
     email: 'nguyenvana@gmail.com'
-  }).populate('friends').select('friends email')
-  console.log(result);
+  }).select('-_id friends email').populate('friends');
+
+  result.friends.forEach((friend) => {
+    console.log(friend.name);
+  })
 
 })();
