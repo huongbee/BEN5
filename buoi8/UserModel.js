@@ -11,19 +11,19 @@ const UserSchema = new Schema({
   tags: [String], // ['tag1','tag2']
   posts: [{
     type: mongoose.Types.ObjectId,
-    $ref: 'Post'
+    ref: 'Post'
   }],
   friends: [{
     type: mongoose.Types.ObjectId,
-    $ref: 'User'
+    ref: 'User'
   }],
   receiveRequests: [{
     type: mongoose.Types.ObjectId,
-    $ref: 'User'
+    ref: 'User'
   }],
   sendRequests: [{
     type: mongoose.Types.ObjectId,
-    $ref: 'User'
+    ref: 'User'
   }]
 });
 const UserModel = mongoose.model('User', UserSchema);

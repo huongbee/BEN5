@@ -98,41 +98,94 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
 // })();
 
 // 4.6
+// (async () => {
+//   // userA login
+//   const userA = await UserModel.findOne({
+//     email: 'nguyenvana@gmail.com',
+//     password: sha256(sha256(SECRET_KEY + '111111'))
+//   })
+//   if (userA) {
+//     const userB = await UserModel.findOneAndUpdate(
+//       {
+//         email: 'nguyenvanc@gmail.com',
+//       },
+//       {
+//         $addToSet: {
+//           receiveRequests: userA._id
+//         }
+//       }
+//     )
+//     if (userB) {
+//       const updateUserA = await UserModel.updateOne(
+//         {
+//           _id: userA._id,
+//         },
+//         {
+//           $addToSet: {
+//             sendRequests: userB._id
+//           }
+//         }
+//       );
+//       console.log(updateUserA);
+
+//     }
+
+//     // const post = await PostModel.findOneAndUpdate({})
+//   } else {
+//     console.log('Can\'t find userA');
+//   }
+
+// })();
+
+// 4.7
+// (async () => {
+//   // userB login
+//   const userB = await UserModel.findOne({
+//     email: 'nguyenvanb@gmail.com',
+//     password: sha256(sha256(SECRET_KEY + '111111'))
+//   })
+//   if (userB) {
+//     const userA = await UserModel.findOneAndUpdate(
+//       {
+//         email: 'nguyenvana@gmail.com',
+//       },
+//       {
+//         $pull: {
+//           sendRequests: userB._id
+//         },
+//         $addToSet: {
+//           friends: userB._id
+//         }
+//       }
+//     )
+//     if (userA) {
+//       const updateUserB = await UserModel.updateOne(
+//         {
+//           _id: userB._id
+//         },
+//         {
+//           $pull: {
+//             receiveRequests: userA._id
+//           },
+//           $addToSet: {
+//             friends: userA._id
+//           }
+//         }
+//       );
+//       console.log(updateUserB);
+
+//     }
+//   } else {
+//     console.log('Can\'t find userA');
+//   }
+
+// })();
+
+// 4.9
 (async () => {
-  // userA login
-  const userA = await UserModel.findOne({
-    email: 'nguyenvana@gmail.com',
-    password: sha256(sha256(SECRET_KEY + '111111'))
-  })
-  if (userA) {
-    const userB = await UserModel.findOneAndUpdate(
-      {
-        email: 'nguyenvanc@gmail.com',
-      },
-      {
-        $addToSet: {
-          receiveRequests: userA._id
-        }
-      }
-    )
-    if (userB) {
-      const updateUserA = await UserModel.updateOne(
-        {
-          _id: userA._id,
-        },
-        {
-          $addToSet: {
-            sendRequests: userB._id
-          }
-        }
-      );
-      console.log(updateUserA);
-
-    }
-
-    // const post = await PostModel.findOneAndUpdate({})
-  } else {
-    console.log('Can\'t find userA');
-  }
+  const result = await UserModel.findOne({
+    email: 'nguyenvana@gmail.com'
+  }).populate('friends').select('friends email')
+  console.log(result);
 
 })();

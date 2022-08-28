@@ -22,7 +22,7 @@
  *      4.7 Account nguyenvanb@gmail.com accept yêu cầu kết bạn của acc nguyenvana@gmail.com
  *      4.8 Account nguyenvanb@gmail.com huỷ yêu cầu kết bạn của acc nguyenvana@gmail.com
  *
- *      4.9 Liệt kê các bài đăng của user có email 'nguyenvana@gmail.com'
+ *      4.9 Liệt kê các yc kết bạn mà mà user có email 'nguyenvana@gmail.com' đã gửi đi
  *      4.10 Cho biết user có email 'nguyenvana@gmail.com' có tất cả bao nhiêu bạn bè, cho biết thông tin của các user đó
  *      4.11 Liệt kê các yêu cầu kết bạn đã nhận của user nguyenvana@gmail.com, cho biết tên của người đó
  *      4.12 Cho biết bài đăng với id .... có bao nhiêu lượt like,
