@@ -206,3 +206,4 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
   console.log(post);
 })();
 // https://mongoosejs.com/docs/populate.html
+// https://kminacademy.notion.site/MongoDB-5f1c3546a4a24ccd8c9e28e2440106d3
