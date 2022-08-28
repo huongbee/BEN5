@@ -183,12 +183,26 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
 
 // 4.9
 (async () => {
-  const result = await UserModel.findOne({
-    email: 'nguyenvana@gmail.com'
-  }).select('-_id friends email').populate('friends');
+  // const result = await UserModel.findOne({
+  //   email: 'nguyenvana@gmail.com'
+  // }).select('-_id friends email').populate('friends');
 
-  result.friends.forEach((friend) => {
-    console.log(friend.name);
-  })
+  // result.friends.forEach((friend) => {
+  //   console.log(friend.name);
+  // })
 
+
+  //4.12
+  const post = await PostModel.findOne({
+    _id: '630a230a2bc7d7382fb7cf82'
+  }).select('-_id likes author comments')
+    .populate('author', 'name -_id')
+    .populate({
+      path: 'likes',
+      select: 'name -_id',
+      // match: { author: 'user_id' },
+      // populate: { path: 'author' }
+    });
+  console.log(post);
 })();
+// https://mongoosejs.com/docs/populate.html
