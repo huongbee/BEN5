@@ -61,34 +61,78 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
 
 // })();
 
+// 4.4->4.5
+// (async () => {
+//   // user login
+//   const user = await UserModel.findOne({
+//     email: 'nguyenvanb@gmail.com',
+//     password: sha256(sha256(SECRET_KEY + '111111'))
+//   })
+//   if (user) {
+//     // id post: 630a1df9891c293501eba06e
+//     const updated = await PostModel.updateOne(
+//       {
+//         _id: '630a230a2bc7d7382fb7cf82'
+//       },
+//       {
+//         // $addToSet: { // thêm phần tử user._id vào array likes, có validate unique
+//         //   likes: user._id
+//         // }
+//         // $push: { // thêm phần tử user._id vào array likes
+//         //   likes: user._id
+//         // }
+//         $pull: { // remove phần tử user._id khỏi array likes (pullAll)
+//           likes: user._id
+//         }
+//       }
+//     );
+//     console.log(updated); // { n: 1, nModified: 1, ok: 1 }
+//     if (updated && updated.nModified === 1) {
+//       console.log('Cập nhật thành công');
+//     }
+//     // const post = await PostModel.findOneAndUpdate({})
+//   } else {
+//     console.log('Can\'t find user');
+//   }
+
+// })();
+
+// 4.6
 (async () => {
-  // user login
-  const user = await UserModel.findOne({
-    email: 'nguyenvanb@gmail.com',
+  // userA login
+  const userA = await UserModel.findOne({
+    email: 'nguyenvana@gmail.com',
     password: sha256(sha256(SECRET_KEY + '111111'))
   })
-  if (user) {
-    // id post: 630a1df9891c293501eba06e
-    const updated = await PostModel.updateOne(
+  if (userA) {
+    const userB = await UserModel.findOneAndUpdate(
       {
-        _id: '630a230a2bc7d7382fb7cf82'
+        email: 'nguyenvanc@gmail.com',
       },
       {
-        $addToSet: { // thêm phần tử user._id vào array likes, có validate unique
-          likes: user._id
+        $addToSet: {
+          receiveRequests: userA._id
         }
-        // $push: { // thêm phần tử user._id vào array likes
-        //   likes: user._id
-        // }
       }
-    );
-    console.log(updated); // { n: 1, nModified: 1, ok: 1 }
-    if (updated && updated.nModified === 1) {
-      console.log('Cập nhật thành công');
+    )
+    if (userB) {
+      const updateUserA = await UserModel.updateOne(
+        {
+          _id: userA._id,
+        },
+        {
+          $addToSet: {
+            sendRequests: userB._id
+          }
+        }
+      );
+      console.log(updateUserA);
+
     }
+
     // const post = await PostModel.findOneAndUpdate({})
   } else {
-    console.log('Can\'t find user');
+    console.log('Can\'t find userA');
   }
 
 })();
