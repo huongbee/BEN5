@@ -35,26 +35,58 @@ const SECRET_KEY = 'chuoi_bi_mat_de_hash_p@ssw0rd';
 
 // hash | encode | encrypt
 
+// (async () => {
+//   // user login
+//   const user = await UserModel.findOne({
+//     email: 'nguyenvana@gmail.com',
+//     password: sha256(sha256(SECRET_KEY + '111111'))
+//   })
+//   if (user) {
+//     // insert
+//     // console.log(user);
+//     const post = await PostModel.create({
+//       author: user._id,
+//       content: 'Status thu tu tren trang ca nhan cua user C'
+//     });
+//     const comment = await CommentModel.create({
+//       author: user._id,
+//       post: post._id,
+//       content: 'User A comment tren bai post cua user C co idPost la ' + post._id
+//     })
+//     console.log(comment);
+
+//   } else {
+//     console.log('Can\'t find user');
+//   }
+
+// })();
+
 (async () => {
   // user login
   const user = await UserModel.findOne({
-    email: 'nguyenvana@gmail.com',
+    email: 'nguyenvanb@gmail.com',
     password: sha256(sha256(SECRET_KEY + '111111'))
   })
   if (user) {
-    // insert
-    // console.log(user);
-    const post = await PostModel.create({
-      author: user._id,
-      content: 'Status thu tu tren trang ca nhan cua user C'
-    });
-    const comment = await CommentModel.create({
-      author: user._id,
-      post: post._id,
-      content: 'User A comment tren bai post cua user C co idPost la ' + post._id
-    })
-    console.log(comment);
-
+    // id post: 630a1df9891c293501eba06e
+    const updated = await PostModel.updateOne(
+      {
+        _id: '630a230a2bc7d7382fb7cf82'
+      },
+      {
+        $addToSet: { // thêm phần tử user._id vào array likes, có validate unique
+          likes: user._id
+        }
+        // $push: { // thêm phần tử user._id vào array likes
+        //   likes: user._id
+        // }
+      }
+    );
+    console.log(updated); // { n: 1, nModified: 1, ok: 1 }
+    if (updated && updated.nModified === 1) {
+      console.log('Cập nhật thành công');
+    }
+    // const post = await PostModel.findOneAndUpdate({})
   } else {
     console.log('Can\'t find user');
   }
