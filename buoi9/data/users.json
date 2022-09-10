@@ -1,11 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Nguyen Van A",
-    "age": "22",
-    "address": "District 3, HCM"
-  },
-  {
     "id": 2,
     "name": "Nguyen Van B",
     "age": "21",
@@ -13,14 +7,20 @@
   },
   {
     "id": 3,
-    "name": "Nguyen Van C",
+    "name": "Tran Thi Diem Phuc",
     "age": "32",
-    "address": "District 4, HCM"
+    "address": "District Tan Phu, HN"
   },
   {
-    "id": 4,
-    "name": "Nguyen Van D",
-    "age": "5",
-    "address": "District 7, HCM"
+    "id": 5,
+    "name": "Nguyen Van E",
+    "age": "13",
+    "address": "District Tan Binh, HCM"
+  },
+  {
+    "id": 6,
+    "name": "Nguyen Van F",
+    "age": "33",
+    "address": "District Tan Phu, HCM"
   }
 ]
