@@ -16,6 +16,24 @@ const readUsers = (file) => {
   return users;
 }
 
+const writeUsers = (file, userObj) => {
+  try {
+    if (!userObj.id) return false;
+    const user = {
+      id: userObj.id,
+      name: userObj.name || '',
+      age: userObj.age || '',
+      address: userObj.address || ''
+    }
+    // const userStr = userObj.id + '|' + userObj.name + '|' + userObj.age + '|' + userObj.address;
+    const userStr = Object.values(user).join('|');
+    fs.appendFileSync(file, '\n' + userStr, 'utf8');
+    return true
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
 
 
-module.exports = { readUsers }
+module.exports = { readUsers, writeUsers }
