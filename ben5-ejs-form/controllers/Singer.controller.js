@@ -5,9 +5,6 @@ const Singer = new SingerModel();
 
 router.get('/', async (request, response) => {
   const singers = await Singer.getAll();
-  singers.forEach((singer) => {
-    console.log(singer.name);
-  })
   response.render('home', { title: 'Home Page', singers });
 });
 router.get('/add', (request, response) => {
