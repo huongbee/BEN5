@@ -6,6 +6,11 @@ const SingerSchema = new Schema({
   avatar: String,
   link: String,
   createdAt: Date
-})
+});
 const SingerModel = mongoose.model('Singer', SingerSchema);
-module.exports = SingerModel;
+class Singer {
+  getAll() {
+    return SingerModel.find().lean();
+  }
+}
+module.exports = Singer;
