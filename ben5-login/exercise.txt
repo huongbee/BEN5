@@ -1,0 +1,17 @@
+Dựng 1 app có các chức năng cơ bản sau:
+- 1. Register: nhập sđt/email, password, fullname,...
+- 2. Login: nếu user nhập sai pass quá 5 lần, khóa user unlimit
+- 3. Update password: logged in: old pass, new pass, confirm new pass
+- 4.1 Forget password: nhập email -> gửi link reset pass về mail -> đến bước 5
+- 4.2 Forget password: nhập SĐT -> gửi OTP về SĐT, (OTP valid trong 2p)
+  4.2.1 Xác thực OTP:
+    + nếu user nhập sai OTP 5 lần, khóa user thực hiện chức năng Forget password trong 30p,
+    + nếu xác thực OTP thành công -> đến bước 5
+- 5. Reset password: new pass, confirm new pass
+- 6. Get user info: validate user token
+
+encrypt pass
+json web token
+redis
+gửi mail
+DB
