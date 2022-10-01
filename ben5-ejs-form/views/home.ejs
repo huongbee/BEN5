@@ -1,71 +1,61 @@
 <%- include('layouts/header.ejs') %>
-  <% if(errorMsg!='' ){%>
+  <%- include('layouts/error-message.ejs') %>
     <div class="row">
       <div class="col-2">
       </div>
       <div class="col-8">
+        <br>
+        <a href="/add">
+          <button class="btn btn-success">Add new singer</button></a>
         <br><br>
-        <label for="" class="alert alert-danger">
-          <%=errorMsg%>
-        </label>
       </div>
       <div class="col-2"></div>
     </div>
-    <%}%>
-      <div class="row">
-        <div class="col-2">
-        </div>
-        <div class="col-8">
-          <br>
-          <a href="/add">
-            <button class="btn btn-success">Add new singer</button></a>
-          <br><br>
-        </div>
-        <div class="col-2"></div>
+    <div class="row">
+      <div class="col-2">
       </div>
-      <div class="row">
-        <div class="col-2">
-        </div>
-        <div class="col-8">
-          <h2>Home</h2>
-          <table class="table">
-            <thead>
+      <div class="col-8">
+        <h2>Home</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Avatar</th>
+              <th scope="col">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% singers.forEach((singer, index)=> {%>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Avatar</th>
-                <th scope="col">Options</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% singers.forEach((singer, index)=> {%>
-                <tr>
-                  <th scope="row">
-                    <%=index+1%>
-                  </th>
-                  <td>
-                    <a href="https://zingmp3.vn/<%=singer.link%>" target="_blank">
-                      <%=singer.name%>
+                <th scope="row">
+                  <%=index+1%>
+                </th>
+                <td>
+                  <a href="https://zingmp3.vn/<%=singer.link%>" target="_blank">
+                    <%=singer.name%>
+                  </a>
+                </td>
+                <td>
+                  <img width="200px" src="https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp/avatars<%=singer.avatar%>">
+                </td>
+                <td>
+                  <button style="width:100px" type="button" class="btn btn-warning">
+                    <a href="/update/<%=singer._id%>">
+                      Update
                     </a>
-                  </td>
-                  <td>
-                    <img width="200px"
-                      src="https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp/avatars<%=singer.avatar%>">
-                  </td>
-                  <td>
-                    <button style="width:100px" type="button" class="btn btn-warning">
-                      <a href="/update/<%=singer._id%>">
-                        Update
-                      </a>
-                    </button>
-                    <br>
-                    <br>
-                    <button style="width:100px" type="button" class="btn btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <%})%>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-2"></div>
+                  </button>
+                  <br>
+                  <br>
+                  <button style="width:100px" type="button" class="btn btn-danger"
+                    onclick="return confirm('Are you sure?')">
+                    <a href="/delete/<%=singer._id%>">Delete</a>
+                  </button>
+                </td>
+              </tr>
+              <%})%>
+          </tbody>
+        </table>
       </div>
+      <div class="col-2"></div>
+    </div>

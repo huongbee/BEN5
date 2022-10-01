@@ -33,5 +33,8 @@ class Singer {
       }
     )
   }
+  removeOne(_id) {
+    return SingerModel.deleteOne({ _id });
+  }
 }
 module.exports = Singer;
