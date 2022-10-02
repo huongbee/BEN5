@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserModel = require('../models/User.model');
 const User = new UserModel();
-const utils = require('../libs/utils');
+const { hashPassword, comparePassword } = require('../libs/utils');
 const commonConstant = require('../constants/common.constant');
 
 router.post('/register', async (req, res) => {
@@ -10,7 +10,7 @@ router.post('/register', async (req, res) => {
     // TODO: validate input
     // TODO: check email/phone exits
     const { email, phone, password, fullname } = req.body;
-    const passwordHashed = utils.hashPassword(password, commonConstant.PASSWORD_SECRET_KEY);
+    const passwordHashed = hashPassword(password, commonConstant.PASSWORD_SECRET_KEY);
 
     const user = await User.createUser(email, phone, passwordHashed, fullname);
     if (!user || !user._id) {
@@ -32,6 +32,42 @@ router.post('/register', async (req, res) => {
       }
     })
   } catch (error) {
+    res.json({
+      code: 1001,
+      message: 'Lỗi hệ thống. Vui lòng thử lại sau',
+      data: null
+    })
+  }
+});
+
+// route router routing
+
+router.post('/login', async (req, res) => {
+  try {
+    // TODO: validate input
+    const { email, password } = req.body;
+    const user = await User.findUserByEmail(email);
+    const passwordHashed = hashPassword(password, commonConstant.PASSWORD_SECRET_KEY);
+    const storedPassword = user.password;
+    if (!comparePassword(passwordHashed, storedPassword)) {
+      return res.json({
+        code: 1002,
+        message: 'Mật khẩu không đúng',
+        data: null
+      })
+    }
+    delete user.password;
+    delete user.__v;
+    return res.json({
+      code: 1000,
+      message: 'Đăng nhập thành công',
+      data: {
+        accessToken: '123456232,322',
+        userInfo: { ...user }
+      }
+    })
+  } catch (error) {
+    console.log(error);
     res.json({
       code: 1001,
       message: 'Lỗi hệ thống. Vui lòng thử lại sau',

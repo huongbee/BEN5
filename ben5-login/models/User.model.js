@@ -35,6 +35,9 @@ class User {
     });
     return user;
   }
+  findUserByEmail(email) {
+    return UserModel.findOne({ email }).lean();
+  }
 }
 
 module.exports = User;
