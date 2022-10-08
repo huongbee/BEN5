@@ -1,6 +1,6 @@
 Dựng 1 app có các chức năng cơ bản sau:
 - 1. Register: nhập sđt/email, password, fullname,...
-- 2. Login: nếu user nhập sai pass quá 5 lần, khóa user unlimit
+- 2. Login: nếu user nhập sai pass quá 5 lần liên tiếp, khóa user unlimit
 - 3. Update password: logged in: old pass, new pass, confirm new pass
 - 4.1 Forget password: nhập email -> gửi link reset pass về mail -> đến bước 5
 - 4.2 Forget password: nhập SĐT -> gửi OTP về SĐT, (OTP valid trong 2p)
@@ -16,3 +16,10 @@ json web token
 redis
 gửi mail
 DB
+
+day1: nhập sai 1 lần
+day2: nhập sai 3
+và
+day3: nhập sai 1 --- 5lần (day1+day2+day3) >> bạn bị khóa =>> 3 days
+hoặc
+day4: nhập sai 1 --- 5lần (day1+day2+day4) >> bạn bị khóa =>> 4 days

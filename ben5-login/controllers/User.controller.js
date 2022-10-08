@@ -49,15 +49,39 @@ router.post('/login', async (req, res) => {
     // TODO: validate input
     const { email, password } = req.body;
     const user = await User.findUserByEmail(email);
+    // check user was locked
+    if (user.isLocked) {
+      return res.json({
+        code: 1003,
+        message: 'Tài khoản đã bị khóa. Vui lòng liên hệ bộ phận CSKH...',
+        data: null
+      })
+    }
     const passwordHashed = hashPassword(password, commonConstant.PASSWORD_SECRET_KEY);
     const storedPassword = user.password;
+
     if (!comparePassword(passwordHashed, storedPassword)) {
+      // check user enter password invalid 5 times
+      const countInvalid = 5;
+      // countInvalid++;
+      if (countInvalid === 5) {
+        // lock user unlimit
+        return res.json({
+          code: 1004,
+          message: 'Tài khoản đã bị khóa do nhập sai mật khẩu 5 lần liên tiếp. Vui lòng ....',
+          data: null
+        })
+      }
+
       return res.json({
         code: 1002,
         message: 'Mật khẩu không đúng',
         data: null
       })
     }
+    // user nhập đúng pass
+    // TODO: clear số lần đã nhập sai trước đó
+
     delete user.password;
     delete user.__v;
     const accessToken = signToken({
