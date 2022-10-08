@@ -4,6 +4,8 @@ const UserModel = require('../models/User.model');
 const User = new UserModel();
 const { hashPassword, comparePassword } = require('../libs/utils');
 const commonConstant = require('../constants/common.constant');
+const { signToken, verifyToken } = require('../libs/jwt');
+const { authenticate } = require('../middlewares/authenticate');
 
 router.post('/register', async (req, res) => {
   try {
@@ -58,11 +60,16 @@ router.post('/login', async (req, res) => {
     }
     delete user.password;
     delete user.__v;
+    const accessToken = signToken({
+      _id: user._id,
+      email: user.email,
+      phone: user.phone
+    });
     return res.json({
       code: 1000,
       message: 'Đăng nhập thành công',
       data: {
-        accessToken: '123456232,322',
+        accessToken,
         userInfo: { ...user }
       }
     })
@@ -76,4 +83,16 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/update-password', authenticate, async (req, res) => {
+  // TODO: update password
+  res.json({
+    code: 1000,
+    message: 'Thành công',
+    data: null
+  })
+})
+
+router.post('/user', authenticate, async (req, res) => {
+  // TODO: get user info logged in
+})
 module.exports = router;
