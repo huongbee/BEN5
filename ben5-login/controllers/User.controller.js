@@ -113,9 +113,48 @@ router.post('/login', async (req, res) => {
 
 router.post('/update-password', authenticate, async (req, res) => {
   // TODO: update password
-  res.json({
+  const { oldPass, newPass, confirmPass } = req.body;
+  if (newPass !== confirmPass) {
+    return res.json({
+      code: 1001,
+      message: 'Mật khẩu không giống nhau',
+      data: null
+    })
+  }
+  const email = req.email;
+  const usrID = req.userId;
+  const user = await User.findUserByEmail(email);
+  if (!user) {
+    return res.json({
+      code: 1001,
+      message: 'Không tìm thấy user',
+      data: null
+    })
+  }
+  const passwordHashed = hashPassword(oldPass, commonConstant.PASSWORD_SECRET_KEY);
+  const storedPassword = user.password;
+
+  if (!comparePassword(passwordHashed, storedPassword)) { // tương tự chức năng login
+    return res.json({
+      code: 1001,
+      message: 'Mật khẩu cũ không chính xác',
+      data: null
+    })
+  }
+  const passwordNew = hashPassword(newPass, commonConstant.PASSWORD_SECRET_KEY);
+  // check passwordNew exists in PasswordStoreSchema.passwords
+  const updated = await User.updatePassword(usrID, passwordNew);
+  // lưu pass cũ (storedPassword) vào trong collection PasswordStoreSchema bằng hàm addToSet
+  if (!updated || updated.modifiedCount != 1) {
+    return res.json({
+      code: 1001,
+      message: 'Cập nhật mật khẩu không thành công',
+      data: null
+    })
+  }
+  return res.json({
     code: 1000,
-    message: 'Thành công',
+    message: 'Cập nhật mật khẩu thành công',
     data: null
   })
 })

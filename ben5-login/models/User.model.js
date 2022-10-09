@@ -41,6 +41,9 @@ class User {
   lockUser(_id) {
     return UserModel.updateOne({ _id }, { isLocked: true });
   }
+  updatePassword(_id, password) {
+    return UserModel.updateOne({ _id }, { password });
+  }
 }
 
 module.exports = User;

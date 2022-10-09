@@ -3,9 +3,10 @@ const { verifyToken } = require('../libs/jwt');
 module.exports = {
   authenticate: (req, res, next) => {
     const { accesstoken } = req.headers;
-    console.log(accesstoken);
     try {
-      verifyToken(accesstoken);
+      const decoded = verifyToken(accesstoken);
+      req.userId = decoded._id;
+      req.email = decoded.email;
     } catch (error) {
       console.log('Error!!! ' + error.message);
       res.status(401);
