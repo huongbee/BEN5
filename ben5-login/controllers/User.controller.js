@@ -6,6 +6,8 @@ const { hashPassword, comparePassword } = require('../libs/utils');
 const commonConstant = require('../constants/common.constant');
 const { signToken, verifyToken } = require('../libs/jwt');
 const { authenticate } = require('../middlewares/authenticate');
+const Redis = require('../libs/ioredis');
+const redis = new Redis();
 
 router.post('/register', async (req, res) => {
   try {
@@ -62,16 +64,18 @@ router.post('/login', async (req, res) => {
 
     if (!comparePassword(passwordHashed, storedPassword)) {
       // check user enter password invalid 5 times
-      const countInvalid = 5;
-      // countInvalid++;
+      let countInvalid = +(await redis.get(commonConstant.COUNT_INVALID_PASS + user._id)) || 0;
+      countInvalid++;
       if (countInvalid === 5) {
         // lock user unlimit
+        await User.lockUser(user._id);
         return res.json({
           code: 1004,
           message: 'Tài khoản đã bị khóa do nhập sai mật khẩu 5 lần liên tiếp. Vui lòng ....',
           data: null
         })
       }
+      redis.set(commonConstant.COUNT_INVALID_PASS + user._id, countInvalid); // COUNT_INVALID_PASS_633949363b551a6e9682bad9
 
       return res.json({
         code: 1002,
@@ -80,8 +84,8 @@ router.post('/login', async (req, res) => {
       })
     }
     // user nhập đúng pass
-    // TODO: clear số lần đã nhập sai trước đó
-
+    // clear số lần đã nhập sai trước đó
+    redis.delete(commonConstant.COUNT_INVALID_PASS + user._id);
     delete user.password;
     delete user.__v;
     const accessToken = signToken({
