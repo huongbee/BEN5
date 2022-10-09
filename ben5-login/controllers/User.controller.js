@@ -8,6 +8,7 @@ const { signToken, verifyToken } = require('../libs/jwt');
 const { authenticate } = require('../middlewares/authenticate');
 const Redis = require('../libs/ioredis');
 const redis = new Redis();
+const Mailer = require('../libs/nodemailer');
 
 router.post('/register', async (req, res) => {
   try {
@@ -161,5 +162,20 @@ router.post('/update-password', authenticate, async (req, res) => {
 
 router.post('/user', authenticate, async (req, res) => {
   // TODO: get user info logged in
+})
+router.post('/forget-password', async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findUserByEmail(email);
+  if (!user) {
+    return res.json({
+      code: 1001,
+      message: 'Không tìm thấy user',
+      data: null
+    })
+  }
+  // TODO: gửi token về mail cho user để reset pass
+  // console.log(link);
+
+  await Mailer.sendMail();
 })
 module.exports = router;
