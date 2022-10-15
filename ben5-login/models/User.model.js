@@ -38,6 +38,9 @@ class User {
   findUserByEmail(email) {
     return UserModel.findOne({ email }).lean();
   }
+  findUserByPhoneNumber(phone) {
+    return UserModel.findOne({ phone }).lean();
+  }
   lockUser(_id) {
     return UserModel.updateOne({ _id }, { isLocked: true });
   }

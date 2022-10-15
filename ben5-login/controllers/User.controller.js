@@ -174,7 +174,7 @@ router.post('/forget-password', async (req, res) => {
       data: null
     })
   }
-  // TODO: gửi token về mail cho user để reset pass
+  // gửi token về mail cho user để reset pass
   const objUser = {
     userId: user._id,
     email
@@ -223,4 +223,47 @@ router.post('/forget-password/reset-password', async (req, res) => {
   // TODO giống chức năng update password nhưng không có authenticate
 })
 
+// 4.2
+router.post('/forget-password-by-phone', async (req, res) => {
+  const { phone } = req.body;
+  // TODO: validate phone format
+  const user = await User.findUserByPhoneNumber(phone);
+  if (!user) {
+    return res.json({
+      code: 1001,
+      message: 'Không tìm thấy user',
+      data: null
+    })
+  }
+  // gửi OTP về PHONE cho user để reset pass
+  // B1. generate OTP
+  // B2. set OTP belongs to phone
+  // B3. set OTP valid trong 2p
+  return res.json({
+    code: 1000,
+    message: 'Gửi OTP thành công',
+    data: null
+  })
+})
+// user nhập OTP ở màn hình kiểm tra OTP trước khi thay đổi pass mới
+router.post('/forget-password-by-phone/validate-otp', async (req, res) => {
+  const { phone, OTP } = req.body;
+  // phone: user ko nhập, client gửi lên từ bước trước đó đã lưu (bước /forget-password-by-phone)
+  // OTP: do user nhập
+  // B1. check OTP belongs to phone
+  // B2. check OTP valid trong 2p
+  // 4.2.1 check user nhập sai OTP 5 lần, khóa user thực hiện chức năng Forget password trong 30p
+  return res.json({
+    code: 1000,
+    message: 'Xác thực thành công',
+    data: null
+  })
+});
+//5.Reset password
+router.post('/forget-password-by-phone/reset-password', async (req, res) => {
+  const { password, confirmPass, phone, userId } = req.body;
+  // password, confirmPass: do user nhập từ form
+  //  phone, userId: do client (web/app) gửi lên từ response của api /forget-password-by-phone/validate-otp
+  // TODO giống chức năng update password nhưng không có authenticate
+})
 module.exports = router;
