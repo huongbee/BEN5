@@ -187,7 +187,7 @@ router.post('/forget-password', async (req, res) => {
 })
 
 router.get('/forget-password/token/*', async (req, res) => {
-  const token = req.params[0];
+  const token = req.params[0]; // * any text
   try {
     const data = aesDecrypt(token, commonConstant.FORGET_PASS_TOKEN_KEY);
     return res.json({
@@ -203,7 +203,7 @@ router.get('/forget-password/token/*', async (req, res) => {
     })
   }
 });
-router.post('/forget-password', async (req, res) => {
+router.post('/forget-password/change-password', async (req, res) => {
   const { password, confirmPass, userId, email } = req.body;
   // password, confirmPass: do user nhập từ form
   // userId, email: do client (web/app) gửi lên từ response của api /forget-password/token/*
