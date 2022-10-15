@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserModel = require('../models/User.model');
 const User = new UserModel();
-const { hashPassword, comparePassword } = require('../libs/utils');
+const { hashPassword, comparePassword, aesEncrypt, aesDecrypt } = require('../libs/utils');
 const commonConstant = require('../constants/common.constant');
 const { signToken, verifyToken } = require('../libs/jwt');
 const { authenticate } = require('../middlewares/authenticate');
@@ -174,8 +174,40 @@ router.post('/forget-password', async (req, res) => {
     })
   }
   // TODO: gửi token về mail cho user để reset pass
-  // console.log(link);
-
-  await Mailer.sendMail();
+  const objUser = { userId: user._id, email };
+  let token = aesEncrypt(objUser, commonConstant.FORGET_PASS_TOKEN_KEY);
+  let link = `http://localhost:3000/forget-password/token/${token}`;
+  console.log(link);
+  // await Mailer.sendMail(link, email);
+  return res.json({
+    code: 1000,
+    message: 'Gửi mail thành công',
+    data: null
+  })
 })
+
+router.get('/forget-password/token/*', async (req, res) => {
+  const token = req.params[0];
+  try {
+    const data = aesDecrypt(token, commonConstant.FORGET_PASS_TOKEN_KEY);
+    return res.json({
+      code: 1000,
+      message: 'Xác thực thành công',
+      data
+    })
+  } catch (error) {
+    return res.json({
+      code: 1001,
+      message: 'Liên kết bạn nhập vào không đúng, vui lòng thử lại',
+      data: null
+    })
+  }
+});
+router.post('/forget-password', async (req, res) => {
+  const { password, confirmPass, userId, email } = req.body;
+  // password, confirmPass: do user nhập từ form
+  // userId, email: do client (web/app) gửi lên từ response của api /forget-password/token/*
+  // TODO giống chức năng update password nhưng không có authenticate
+})
+
 module.exports = router;

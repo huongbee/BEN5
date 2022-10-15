@@ -17,7 +17,7 @@ module.exports = {
     });
     let info = await transporter.sendMail({
       from: `"Admin A" <i5xogl3gdifcecas@ethereal.email>`, // sender address
-      to: "eunice73@ethereal.email (, huongnguyen08.cv@gmail.com", // list of receivers
+      to: "eunice73@ethereal.email (huongnguyen08.cv@gmail.com", // list of receivers
       subject: "Test mail 22222",
       text: "Hello world?", // plain text body
       html: "<b style='color:red'>Hello world?</b>", // html body
