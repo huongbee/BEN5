@@ -163,6 +163,7 @@ router.post('/update-password', authenticate, async (req, res) => {
 router.post('/user', authenticate, async (req, res) => {
   // TODO: get user info logged in
 })
+// 4.1
 router.post('/forget-password', async (req, res) => {
   const { email } = req.body;
   const user = await User.findUserByEmail(email);
@@ -174,9 +175,16 @@ router.post('/forget-password', async (req, res) => {
     })
   }
   // TODO: gửi token về mail cho user để reset pass
-  const objUser = { userId: user._id, email };
+  const objUser = {
+    userId: user._id,
+    email
+    // expiredAt: new Date() + 5 mins (Cách I)
+  };
   let token = aesEncrypt(objUser, commonConstant.FORGET_PASS_TOKEN_KEY);
   let link = `http://localhost:3000/forget-password/token/${token}`;
+
+  // luu token vào DB cho user đã yc quên password (Cách II)
+
   console.log(link);
   // await Mailer.sendMail(link, email);
   return res.json({
@@ -185,11 +193,15 @@ router.post('/forget-password', async (req, res) => {
     data: null
   })
 })
-
+// do user nhấp vào link quên pass trong email
 router.get('/forget-password/token/*', async (req, res) => {
   const token = req.params[0]; // * any text
   try {
     const data = aesDecrypt(token, commonConstant.FORGET_PASS_TOKEN_KEY);
+    // validate expiredAt vs new Date() (Cách I)
+    // find token trong DB để kiểm tra token có tồn tại hay không (Cách II)
+    // nếu có thì cho phép xác thực token thành công và xóa token đã lưu
+    // nếu không thì báo lỗi token ko tồn tại => lỗi
     return res.json({
       code: 1000,
       message: 'Xác thực thành công',
@@ -203,7 +215,8 @@ router.get('/forget-password/token/*', async (req, res) => {
     })
   }
 });
-router.post('/forget-password/change-password', async (req, res) => {
+//5.Reset password
+router.post('/forget-password/reset-password', async (req, res) => {
   const { password, confirmPass, userId, email } = req.body;
   // password, confirmPass: do user nhập từ form
   // userId, email: do client (web/app) gửi lên từ response của api /forget-password/token/*
