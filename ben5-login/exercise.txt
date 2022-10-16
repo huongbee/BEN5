@@ -3,7 +3,10 @@ Dựng 1 app có các chức năng cơ bản sau:
 - 2. Login: nếu user nhập sai pass quá 5 lần liên tiếp, khóa user unlimit
 - 3. Update password: logged in: old pass, new pass, confirm new pass
 - 4.1 Forget password: nhập email -> gửi link reset pass về mail -> đến bước 5 (link đã sử dụng thì không được tái sử dụng)
-- 4.2 Forget password: nhập SĐT -> gửi OTP về SĐT, (OTP valid trong 2p)
+- 4.2 Forget password: nhập SĐT -> gửi OTP về SĐT
+  + OTP valid trong 2 phút
+  + chặn user yêu cầu OTP trong 2 phút
+  + chặn user yc gửi OTP 3 lần liên tiếp trong 1h
   4.2.1 Xác thực OTP:
     + nếu user nhập sai OTP 5 lần, khóa user thực hiện chức năng Forget password trong 30p,
     + nếu xác thực OTP thành công -> đến bước 5

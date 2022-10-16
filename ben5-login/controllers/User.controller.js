@@ -227,6 +227,17 @@ router.post('/forget-password/reset-password', async (req, res) => {
 router.post('/forget-password-by-phone', async (req, res) => {
   const { phone } = req.body;
   // TODO: validate phone format
+  // 4.2.1 check user nhập sai OTP 5 lần, khóa user thực hiện chức năng Forget password trong 30p
+  let countInvalidOtp = +(await redis.get(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone)) || 0;
+  console.log(countInvalidOtp);
+
+  if (countInvalidOtp >= 5) {
+    return res.json({
+      code: 1001,
+      message: 'Hành động của bạn đang bị tạm khóa, vui lòng thử lại sau ?p ?s',
+      data: null
+    })
+  }
   const user = await User.findUserByPhoneNumber(phone);
   if (!user) {
     return res.json({
@@ -237,8 +248,12 @@ router.post('/forget-password-by-phone', async (req, res) => {
   }
   // gửi OTP về PHONE cho user để reset pass
   // B1. generate OTP
+  const otp = (Math.random() * 10000000).toString().substring(0, 6);
   // B2. set OTP belongs to phone
   // B3. set OTP valid trong 2p
+  redis.setTTL(commonConstant.FORGET_PASS_BY_PHONE + phone, otp, 120); // FORGET_PASS_BY_PHONE_090999999
+  console.log(otp);
+  // send otp to SMS phone
   return res.json({
     code: 1000,
     message: 'Gửi OTP thành công',
@@ -248,14 +263,38 @@ router.post('/forget-password-by-phone', async (req, res) => {
 // user nhập OTP ở màn hình kiểm tra OTP trước khi thay đổi pass mới
 router.post('/forget-password-by-phone/validate-otp', async (req, res) => {
   const { phone, OTP } = req.body;
-  // phone: user ko nhập, client gửi lên từ bước trước đó đã lưu (bước /forget-password-by-phone)
-  // OTP: do user nhập
+  // phone: user ko nhập bước trước đó đã lưu (bước /forget-password-by-phone)
+  // OTP: do user nhập ở màn hình hiện tại
   // B1. check OTP belongs to phone
   // B2. check OTP valid trong 2p
-  // 4.2.1 check user nhập sai OTP 5 lần, khóa user thực hiện chức năng Forget password trong 30p
+  const otpStored = await redis.get(commonConstant.FORGET_PASS_BY_PHONE + phone);
+  console.log({ otpStored, OTP });
+  if (!otpStored) {
+    return res.json({
+      code: 1001,
+      message: 'Xác thực không thành công, vui lòng thử lại',
+      data: null
+    })
+  }
+  if (otpStored != OTP) {
+    // 4.2.1 check user nhập sai OTP 5 lần, set key để khóa user thực hiện chức năng Forget password trong 30p
+    const countInvalidOtp = +(await redis.get(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone)) || 0;
+    console.log(countInvalidOtp);
+
+    redis.setTTL(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone, countInvalidOtp + 1, 60 * 30)
+    return res.json({
+      code: 1001,
+      message: 'OTP không chính xác',
+      data: null
+    })
+  }
+  // clear OTP đã lưu
+  redis.delete(commonConstant.FORGET_PASS_BY_PHONE + phone);
+  // clear block 4.2.1
+  redis.delete(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone);
   return res.json({
     code: 1000,
-    message: 'Xác thực thành công',
+    message: 'Xác thực thành công', // go to step 5
     data: null
   })
 });
