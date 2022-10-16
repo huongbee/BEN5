@@ -232,9 +232,12 @@ router.post('/forget-password-by-phone', async (req, res) => {
   console.log(countInvalidOtp);
 
   if (countInvalidOtp >= 5) {
+    const timeToLive = await redis.getTTL(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone);
+    const min = Math.floor(timeToLive / 60);
+    const second = timeToLive - (min * 60)
     return res.json({
       code: 1001,
-      message: 'Hành động của bạn đang bị tạm khóa, vui lòng thử lại sau ?p ?s',
+      message: `Hành động của bạn đang bị tạm khóa, vui lòng thử lại sau ${min}p ${second}s`,
       data: null
     })
   }
@@ -246,12 +249,36 @@ router.post('/forget-password-by-phone', async (req, res) => {
       data: null
     })
   }
+  // 4.2 chặn user yêu cầu OTP trong 2 phút (nếu vừa gửi OTP thì ko gửi nữa)
+  const checkOTPexist = await redis.get(commonConstant.FORGET_PASS_BY_PHONE + phone);
+  console.log({ checkOTPexist });
+
+  if (checkOTPexist) { // thường do client validate
+    return res.json({
+      code: 1001,
+      message: 'OTP đã được gửi, vui lòng thử lại sau 15s',
+      data: null
+    })
+  }
+  // 4.2 chặn user yc gửi OTP 3 lần liên tiếp trong 1h
+  const countOTPsent = +(await redis.get(commonConstant.FORGET_PASS_BY_PHONE_BLOCK_OTP + phone)) || 0;
+  if (countOTPsent >= 3) {
+    const timeToLive = await redis.getTTL(commonConstant.FORGET_PASS_BY_PHONE_BLOCK_OTP + phone);
+    const min = Math.floor(timeToLive / 60);
+    const second = timeToLive - (min * 60)
+    return res.json({
+      code: 1000,
+      message: `Bạn đã yêu cầu OTP 3 lần liên tiếp, vui lòng thử lại sau ${min}m ${second}s`,
+      data: null
+    })
+  }
+  redis.setTTL(commonConstant.FORGET_PASS_BY_PHONE_BLOCK_OTP + phone, countOTPsent + 1, 60 * 60);
   // gửi OTP về PHONE cho user để reset pass
   // B1. generate OTP
   const otp = (Math.random() * 10000000).toString().substring(0, 6);
   // B2. set OTP belongs to phone
   // B3. set OTP valid trong 2p
-  redis.setTTL(commonConstant.FORGET_PASS_BY_PHONE + phone, otp, 120); // FORGET_PASS_BY_PHONE_090999999
+  redis.setTTL(commonConstant.FORGET_PASS_BY_PHONE + phone, otp, 15); // FORGET_PASS_BY_PHONE_090999999
   console.log(otp);
   // send otp to SMS phone
   return res.json({
@@ -289,9 +316,10 @@ router.post('/forget-password-by-phone/validate-otp', async (req, res) => {
     })
   }
   // clear OTP đã lưu
-  redis.delete(commonConstant.FORGET_PASS_BY_PHONE + phone);
+  redis.delete(commonConstant.FORGET_PASS_BY_PHONE + phone); // optional
   // clear block 4.2.1
-  redis.delete(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone);
+  redis.delete(commonConstant.FORGET_PASS_BY_PHONE_INVALID_OTP + phone); // optional
+  redis.delete(commonConstant.FORGET_PASS_BY_PHONE_BLOCK_OTP + phone); // optional
   return res.json({
     code: 1000,
     message: 'Xác thực thành công', // go to step 5

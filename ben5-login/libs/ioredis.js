@@ -24,6 +24,15 @@ class Redis {
     const result = this.redis.get(key);
     return result;
   }
+  /**
+   * get time expired
+   * @param {*} key
+   * @returns
+   */
+  getTTL(key) {
+    const result = this.redis.ttl(key);
+    return result;
+  }
   delete(key) {
     const result = this.redis.del(key);
     return result;
